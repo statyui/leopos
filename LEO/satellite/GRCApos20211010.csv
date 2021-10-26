@@ -1,0 +1,9 @@
+% pos mode  : leo-rdn
+% solution  : forward
+% elev mask : -5.0 deg
+% dynamics  : on
+% tidecorr  : off
+% tropo opt : off
+% ephemeris : broadcast
+% antenna1  :                       ( 0.0000  0.0000  0.0000)
+%  GPST                      x-ecef(m)      y-ecef(m)      z-ecef(m)   Q  ns   sdx(m)   sdy(m)   sdz(m)  sdxy(m)  sdyz(m)  sdzx(m) age(s)  ratio

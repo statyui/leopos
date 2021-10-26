@@ -1,0 +1,32 @@
+-k leokin.conf .\grc10\GRCA2070.10o .\grc10\GRCA102070.ATT .\grc10\brdc2070.10n .\grc10\igs15940.sp3 .\grc10\igs15941.sp3 .\grc10\igs15942.sp3 .\grc10\igs15941.clk_30S -o .\grc10\grca2070.pos  -y 2 -x 5
+-k leokin.conf GRCA2070.10o brdc2070.10n igu15941.sp3 -o grca2070.pos -y 2 -x 5
+-k leokin.conf .\grc16\GRCA0010.16O .\grc16\GRCA0010.att .\grc16\brdc0010.16n .\grc16\igs18775.sp3 .\grc16\igs18776.sp3 .\grc16\igs18776.clk_30s .\grc16\igs18777.erp -o .\grc16\GRCA0010.pos   -y 2 -x 5
+-k leokin.conf .\grc16\GRCA0010.16O .\grc16\GRCA0010.att .\grc16\brdc0010.16n .\grc16\igc18775.sp3 .\grc16\igc18776.sp3 .\grc16\igc18775.clk -o .\grc16\GRCA0010IGC.pos   -y 2 -x 5
+-k leokin.conf .\grc16002\GRCA0020.16O .\grc16002\GRCA160020.att .\grc16002\brdc0020.16n .\grc16002\igs18776.sp3  .\grc16002\igs18776.clk .\grc16002\igs18777.erp -o .\grc16002\GRCA0020.pos   -y 2 -x 5
+-k leokin.conf .\grc16002\GRCA0020.16O .\grc16002\GRCA160020.att .\grc16002\brdc0020.16n .\grc16002\igs18776.sp3  .\grc16002\igs18776.clk .\grc16002\igs18777.erp -o .\grc16002\GRCA0020.pos   -y 2 -x 5
+-k leokin.conf .\luojia0608\luoj1590.18o .\luojia0608\brdc1590.16n .\luojia0608\cod20045.eph  .\luojia0608\cod20045.clk_05s .\luojia0608\cod20047.erp -o .\luojia0608\luoj1590.pos   -y 2 -x 5
+-k leoksf.conf .\luojia0608\luoj1590.18o .\luojia0608\brdm1590.18p .\luojia0608\gbm20045.sp3  .\luojia0608\gbm20045.clk .\luojia0608\gbm20045.erp -o .\luojia0608\luom1590.pos   -y 2 -x 5
+-k leoksf.conf .\luojia0611\LUOJ1620.18o .\luojia0611\brdc1620.18n .\luojia0611\igr20051.sp3 .\luojia0611\igr20051.clk .\luojia0611\igr20051.erp -o .\luojia0611\luom1620.pos   -y 2 -x 5
+
+-k pppkin.conf .\grc10\algo2070.10o .\grc10\brdc2070.10n .\grc10\igs15941.sp3 .\grc10\igs15941.clk .\grc10\igs15947.erp -o .\grc10\algo2070.pos -y 2 -x 5
+-k pppkin.conf .\grc10\zimm2070.10o .\grc10\brdc2070.10n .\grc10\igs15941.sp3 .\grc10\igs15941.clk .\grc10\igs15947.erp -o .\grc10\zimm2070.pos -y 2 -x 5
+-k pppkin.conf .\2017244\cut02440.17o .\2017244\brdc2440.17n .\2017244\wum19644.sp3 .\2017244\wum19644.clk -o .\2017244\cut02440.pos -y 2 -x 5
+-k pppkin.conf .\2017244\jfng2440.17o .\2017244\brdc2440.17n .\2017244\wum19645.sp3 .\2017244\wum19645.clk -o .\2017244\jfng2440.pos -y 2 -x 5
+
+-k pppfix.conf .\2017244\cut02440.17o .\2017244\brdc2440.17n .\2017244\wum19645.sp3 .\2017244\wum19645.clk .\2017244\igs19647.erp -o .\2017244\cut02440.pos -y 2 -x 5 -r -2364337.6774 4870285.5072 -3360809.5423
+-k pppkin.conf .\grc10\algo2070.10o .\grc10\brdc2070.10n .\grc10\igs15941.sp3 .\grc10\igs15941.clk .\grc10\igs15947.erp -o .\grc10\algo2070f.pos -y 2 -x 5  -r 918129.3434 -4346071.2717 4561977.7186 
+-k leoksf.conf .\luojia0611\LUOJ1620.18o .\luojia0611\brdc1620.18n .\luojia0611\igr20051.sp3 .\luojia0611\igr20051.clk .\luojia0611\igr20051.erp -o .\luojia0611\luoj1620.pos   -y 2 -x 5
+D:\Data\PPP\algo2440.18o D:\Data\PPP\igs20166.sp3 D:\Data\PPP\igs20166.clk D:\Data\PPP\brdc2440.18n -o D:\Data\PPP\algo2440ref.pos -k ..\PPPS.conf -y 2 -x 5
+
+-k C:\Users\l\Desktop\vsprogram\LEO\leokin.conf C:\Users\l\Desktop\vsprogram\LEO\satellite\GRCA0010.16o C:\Users\l\Desktop\vsprogram\LEO\satellite\GRCA160010.att C:\Users\l\Desktop\vsprogram\LEO\satellite\brdc0010.16n C:\Users\l\Desktop\vsprogram\LEO\satellite\GRCA18775.sp3 C:\Users\l\Desktop\vsprogram\LEO\satellite\igs18775.clk C:\Users\l\Desktop\vsprogram\LEO\satellite\igr18775.erp -o C:\Users\l\Desktop\vsprogram\LEO\satellite\GRCA0010.pos -y 2 -x 5
+-k leokin.conf .\GRCA0010.16o .\GRCA160010.att .\brdc0010.16n .\GRCA18775.sp3 -y 2 -x 5
+
+pos1-posmode       =leo-rdn    # (0:single,1:dgps,4:movingbase,5:fixed,6:ppp-kine,7:ppp-static,8:ppp-fixed,9:leo-kin,10:leo-rdn)
+
+
+-k E:\lastcomputer\vsprogram\LEO\leokin.conf E:\lastcomputer\vsprogram\LEO\satellite\GRCA0010.16o E:\lastcomputer\vsprogram\LEO\satellite\GRCA160010.att E:\lastcomputer\vsprogram\LEO\satellite\brdc0010.16n E:\lastcomputer\vsprogram\LEO\satellite\GRCA18775.sp3 E:\lastcomputer\vsprogram\LEO\satellite\GRCA18776.sp3 E:\lastcomputer\vsprogram\LEO\satellite\igs18775.clk E:\lastcomputer\vsprogram\LEO\satellite\igs18776.clk -y 2 -x 5
+
+
+pos1-sateph        =precise       # (0:brdc,1:precise,2:brdc+sbas,3:brdc+ssrapc,4:brdc+ssrcom)
+
+pos1-dynamics      =off        # (0:off,1:on)
