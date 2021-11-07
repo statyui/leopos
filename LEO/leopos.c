@@ -476,13 +476,20 @@ static void udpos_leordn(leo_t *leo, gtime_t time, const nav_t *nav)
 	double Q[36] = { 0.0 }, Qt[36] = { 0.0 };
 	double dant[3] = { 0.0 };
 	double dt = 0.0;
-	double erpv[5] = { 0.0 };
+	double erpv1[5] = { 0.0 }, erpv2[5] = { 0.0 };
 	double kep[6] = { 0.0 }, pv[6] = { 0.0 };
+	double  U1[9] = { 0.0 }, U2[9] = { 0.0 }, dU1[9] = { 0.0 }, dU2[9] = { 0.0 };
+	double rr[3] = { 0.0 };  // Body-fixed position
+	double rp[3] = { 0.0 };  // Body-fixed acceleration     
+	gtime_t now;
 
 	gtime_t tutc;
-
-	tutc = gpst2utc(time);
-	if (&nav->erp) geterp(&nav->erp, tutc, erpv);
+	
+	now = gpst2utc(time);
+	tutc = timeadd(time, -(leo->tt));
+	tutc = gpst2utc(tutc);
+	if (&nav->erp) geterp(&nav->erp, tutc, erpv1);
+	if (&nav->erp) geterp(&nav->erp, now, erpv2);
 	/* initialize position for first epoch */
 	if (norm(leo->x, 3) <= 0.0) {
 		for (i = 0; i<3; i++) initx(leo, leo->sol.rr[i], VAR_POS, i);
@@ -495,15 +502,32 @@ static void udpos_leordn(leo_t *leo, gtime_t time, const nav_t *nav)
 		return;
 	}
 	if (norm(leo->sol.rp, 3) > 1) {
-		//p22kepler(GM_EARTH, leo->tt, leo->sol.rp, leo->sol.rr, kep);//at time rp
-		
-		GetVo(GM_EARTH, leo->tt, leo->sol.rp, leo->sol.rr, pv);
+
+
+		//ecef2qeci(tutc, erpv1[2], U1, dU1);
+		//matmul("TN", 3, 1, 3, 1.0, U1, leo->sol.rp, 0.0, rp);
+
+
+
+
+
+		//Differential calculation
+		ecef2qeci(now, erpv2[2], U2, dU2);
+		ecef2qeci(tutc, erpv1[2], U1, dU1);
+		matmul("TN", 3, 1, 3, 1.0, U1, leo->sol.rp, 0.0, rp);
+		matmul("TN", 3, 1, 3, 1.0, U2, leo->sol.rr, 0.0, rr);
+
+
+		//p22kepler(GM_EARTH, leo->tt, rp, rr, kep);//at time rp
+		GetVo(GM_EARTH, leo->tt, rp, rr, pv);
+
 		trace(3, "$KEP,%13.4f \t");
 		tracemat(3, kep, 1, 6, 18, 10);
 		//kepler2pv(GM_EARTH, kep, leo->tt, pv);//at time rp
 
 		/* kinmatic mode without dynamics */
-		leoantoff(leo->sol.time, pv, nav, dant);
+		//leoantoff(leo->sol.time, pv, nav, dant);
+
 		memcpy(y, pv, 6 * sizeof(double));//Sheng Zhuang
 	}
 
@@ -521,7 +545,8 @@ static void udpos_leordn(leo_t *leo, gtime_t time, const nav_t *nav)
 				initx(leo, leo->sol.rr[i + 3], VAR_VEL, i + 3);
 			}
 		}
-		else {//propogate 
+		else {//propogate
+
 			pvpartial(y, leo->tt, y1, dy);
 
 			for (i = 0; i < 6; i++) {
@@ -531,7 +556,8 @@ static void udpos_leordn(leo_t *leo, gtime_t time, const nav_t *nav)
 			}
 			matmul("NN", 6, 6, 6, 1.0, dy, Qt, 0.0, Qt);
 			matmul("NT", 6, 6, 6, 1.0, Qt, dy, 0.0, Q);
-			rk4(leo->tt, tutc, erpv, 10, y);
+			rk4(leo->tt, tutc, nav, 10, y,erpv2);
+			
 			memcpy(leo->x, y, 6 * sizeof(double));
 			for (i = 0; i < 6; i++) {
 				leo->x[i] = y[i];
@@ -829,6 +855,7 @@ static void udstate_ppp(leo_t *leo, const obsd_t *obs, int n, const nav_t *nav)
 {
 	trace(3, "udstate_ppp: n=%d\n", n);
 	gtime_t time = obs->time;
+
 	/* temporal update of position */                          
 	if (leo->opt.mode == PMODE_LEO_KIN) {
 		udpos_leokin(leo, time, nav);

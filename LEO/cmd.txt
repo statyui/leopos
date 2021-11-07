@@ -30,3 +30,5 @@ pos1-posmode       =leo-rdn    # (0:single,1:dgps,4:movingbase,5:fixed,6:ppp-kin
 pos1-sateph        =precise       # (0:brdc,1:precise,2:brdc+sbas,3:brdc+ssrapc,4:brdc+ssrcom)
 
 pos1-dynamics      =off        # (0:off,1:on)
+
+-k E:\lastcomputer\vsprogram\LEO\leokin.conf E:\lastcomputer\vsprogram\LEO\satellite\GRCA0010.16o E:\lastcomputer\vsprogram\LEO\satellite\GRCA160010.att E:\lastcomputer\vsprogram\LEO\satellite\brdc0010.16n E:\lastcomputer\vsprogram\LEO\satellite\GRCA18775.sp3 E:\lastcomputer\vsprogram\LEO\satellite\GRCA18776.sp3 E:\lastcomputer\vsprogram\LEO\satellite\igs18775.clk E:\lastcomputer\vsprogram\LEO\satellite\igs18776.clk -o E:\lastcomputer\vsprogram\LEO\satellite\1026.csv  -y 2 -x 5

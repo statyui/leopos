@@ -245,16 +245,18 @@ extern double gravityJGM3(const double *r, double *U, double nmax, double mmax, 
 	int     n, m;                           // Loop counters
 	double  r_sqr, rho, Fac;               // Auxiliary quantities
 	double  x0, y0, z0;                      // Normalized coordinates
-											 //double  ax, ay, az;                      // Acceleration vector 
+	double  ax, ay, az;									 //double  ax, ay, az;                      // Acceleration vector 
 	double  C, S;                           // Gravitational coefficients
 	double rbf[3] = { 0.0 };  // Body-fixed position
 	double abf[3] = { 0.0 };  // Body-fixed acceleration                      
 	double V[(NJGM3 + 2)][(NJGM3 + 2)] = { 0.0 };// Harmonic functions
 	double W[(NJGM3 + 2)][(NJGM3 + 2)] = { 0.0 };  // work array (0..n_max+1,0..n_max+1)
+	int k = 0;
 
 	// Body-fixed position 
 	//r_bf = E * r;
 	matmul("NN", 3, 1, 3, 1.0, U, r, 0.0, rbf);
+	//for (k = 0; k < 3; k++) rbf[k] = r[k];
 
 	// Auxiliary quantities
 
@@ -300,32 +302,34 @@ extern double gravityJGM3(const double *r, double *U, double nmax, double mmax, 
 	// Calculate accelerations ax,ay,az
 	//
 
-	//ax = ay = az = 0.0;
+	ax = ay = az = 0.0;
 	for (m = 0; m <= mmax; m++) {
 		for (n = m; n <= nmax; n++) {
 			if (m == 0) {
 				C = CS_JGM3[n][0];   // = C_n,0
-				abf[0] -= C * V[n + 1][1];
-				abf[1] -= C * W[n + 1][1];
-				abf[2] -= (n + 1)*C * V[n + 1][0];
+				ax -= C * V[n + 1][1];
+				ay -= C * W[n + 1][1];
+				az -= (n + 1)*C * V[n + 1][0];
 			}
 			else {
 				C = CS_JGM3[n][m];   // = C_n,m 
 				S = CS_JGM3[m - 1][n]; // = S_n,m 
 				Fac = 0.5 * (n - m + 1) * (n - m + 2);
-				abf[0] += +0.5 * (-C * V[n + 1][m + 1] - S * W[n + 1][m + 1])
+				ax += +0.5 * (-C * V[n + 1][m + 1] - S * W[n + 1][m + 1])
 					+ Fac * (+C * V[n + 1][m - 1] + S * W[n + 1][m - 1]);
-				abf[1] += +0.5 * (-C * W[n + 1][m + 1] + S * V[n + 1][m + 1])
+				ay += +0.5 * (-C * W[n + 1][m + 1] + S * V[n + 1][m + 1])
 					+ Fac * (-C * W[n + 1][m - 1] + S * V[n + 1][m - 1]);
-				abf[2] += (n - m + 1) * (-C * V[n + 1][m] - S * W[n + 1][m]);
+				az += (n - m + 1) * (-C * V[n + 1][m] - S * W[n + 1][m]);
 			};
 		}
 	}
 
-	// Body-fixed acceleration
-	for (m = 0; m < 3; m++) {
-		abf[m] = (GM_EARTH / (RJGM3*RJGM3))*abf[m];
-	}
+	
+	//for (m = 0; m < 3; m++) {
+		abf[0] = (GM_EARTH / (RJGM3*RJGM3))*ax;
+		abf[1] = (GM_EARTH / (RJGM3*RJGM3))*ay;
+		abf[2] = (GM_EARTH / (RJGM3*RJGM3))*az;
+	//}
 	matmul("TN", 3, 1, 3, 1.0, U, abf, 0.0, a);
 	//a_bf = (GM_EARTH / (RJGM3*RJGM3)) * Vector(ax, ay, az);
 	// Inertial acceleration 

@@ -804,6 +804,8 @@ extern void matmul(const char *tr, int n, int k, int m, double alpha,
 {
     double d;
     int i,j,x,f=tr[0]=='N'?(tr[1]=='N'?1:2):(tr[1]=='N'?3:4);
+	//f=3 TN
+	//f=1 NN
     
     for (i=0;i<n;i++) for (j=0;j<k;j++) {
         d=0.0;

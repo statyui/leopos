@@ -1015,7 +1015,7 @@ EXPORT void outsolstat(leo_t *leo);
 EXPORT int leopos(leo_t *leo, const obsd_t *obs, int n, const nav_t *nav);
 EXPORT int pppnx(const prcopt_t *opt);
 
-EXPORT void rk4(double t, gtime_t tutc, const double *erpv, int n, double *y);
+EXPORT void rk4(double t, gtime_t tutc, const nav_t *nav, int n, double *y, const double *erpv);
 EXPORT void pvpartial(const double * Y0, double dt, double *Y, double *dYdY0);
 EXPORT int ecef2qeci(gtime_t time, double utc_ut1, double *U, double *dU);
 EXPORT int readatta(const char *file, att_t *att);

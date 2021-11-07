@@ -186,7 +186,7 @@ int forcastmain(int argc, char* argv[]) {
 		while (timediff(tutc,t_old)>0) {
 			h = timediff(tutc,t_old);
 			if (h>Step) h = Step;
-			rk4(h, t_old, erpv, 20, Y);
+			//rk4(h, t_old, erpv, 20, Y);
 			t_old=timeadd(t_old, h);
 		};
 		tutc = timeadd(obs.time, gps_utc);

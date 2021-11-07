@@ -1218,7 +1218,7 @@ extern void pvpartial(const double * Y0, double dt,double *Y, double *dYdY0)
 //
 //------------------------------------------------------------------------------
 
-void step(gtime_t tutc,const double *erpv, int n, double *y, double * yp)
+void step(gtime_t tutc, const nav_t *nav, int n, double *y, double * yp)
 {
 
 	// Pointer to auxiliary data record
@@ -1226,7 +1226,9 @@ void step(gtime_t tutc,const double *erpv, int n, double *y, double * yp)
 	//double  Mjd_GPS = (*p).Mjd0_GPS + t / 86400.0;
 	double r[3] = { 0.0 }, v[3] = { 0.0 }, a[3] = {0.0};
 	int i;
+	double erpv[5] = { 0.0 };
 	for (i = 0; i < 3; i++) { r[i] = y[i]; v[i] = y[i + 3];}
+	if (&nav->erp) geterp(&nav->erp, tutc, erpv);
 	forcessimple(tutc, erpv, r, n, a);
 	//forces(tutc, erpv,r, v,5,1000,1.3,2.3,a);
 	for (i = 0; i < 3; i++) { yp[i] = v[i]; yp[i + 3] = a[i]; }
@@ -1242,24 +1244,45 @@ void step(gtime_t tutc,const double *erpv, int n, double *y, double * yp)
 // tutc: time
 // erpv: earth rotation parameters
 // n: 
-extern void rk4(double t,gtime_t tutc, const double *erpv, int n, double *y)
+extern void rk4(double t,gtime_t tutc, const nav_t *nav, int n, double *y, const double *erpv)
 {
 	double k1[6], k2[6], k3[6], k4[6], w[6];
 	double y1[6] = { 0.0 };
+	double rr[3] = { 0.0 };
+	double vv[3] = { 0.0 };
+	double rbf[3] = { 0.0 };
+	double vbf1[3] = { 0.0 };
+	double vbf2[3] = { 0.0 };
+	double U[9] = { 0.0 };
+	double dU[9] = { 0.0 };
+
 	memcpy(y1, y, 6 * sizeof(double));
 	gtime_t tut1;
 	int i;
 	tut1 = tutc;
-	step(tutc, erpv, n, y, k1);
+	step(tutc, nav, n, y, k1);
 	for (i = 0; i<6; i++) w[i] = y[i] + k1[i] * t / 2.0;
 	tut1 = timeadd(tutc, t / 2.0);
-	step(tut1, erpv, n, w, k2);
+	step(tut1, nav, n, w, k2);
 	for (i = 0; i<6; i++) w[i] = y[i] + k2[i] * t / 2.0;
-	step(tut1, erpv, n, w, k3);
+	step(tut1, nav, n, w, k3);
 	for (i = 0; i<6; i++) w[i] = y[i] + k3[i] * t;
 	tut1 = timeadd(tutc, t);
-	step(tut1, erpv, n, w, k4);
+	step(tut1, nav, n, w, k4);
 	for (i = 0; i<6; i++) y[i] = y[i] + ((k1[i] + 2.0*k2[i] + 2.0*k3[i] + k4[i])*t / 6.0); 
+
+	ecef2qeci(tut1, erpv[2], U, dU);
+	for (i = 0; i < 3; i++) rr[i] = y[i];
+	for (i = 0; i < 3; i++) vv[i] = y[i+3];
+
+	matmul("NN", 3, 1, 3, 1.0, U, rr, 0.0, rbf);
+	matmul("NN", 3, 1, 3, 1.0, U, vv, 0.0, vbf1);
+	matmul("NN", 3, 1, 3, 1.0, dU, rr, 0.0, vbf2);
+
+	//matmul("TN", 3, 1, 3, 1.0, U, rr, 0.0, rbf);
+	//matmul("TN", 3, 1, 3, 1.0, U, vv, 0.0, vbf);
+	for (i = 0; i < 3; i++) y[i] = rbf[i];
+	for (i = 0; i < 3; i++) y[i + 3] = vbf1[i]+vbf2[i];
 
 	trace(3, "rk4: dy=%14.3f %14.3f %14.3f %14.3f %14.3f %14.3f\n", y[0] - y1[0], y[1] - y1[1], y[2] - y1[2], y[3] - y1[3], y[4] - y1[4], y[5] - y1[5]);
 }

@@ -395,6 +395,8 @@ extern int ecef2qeci(gtime_t tutc, double utc_ut1, double *U, double *dU)
 {
 	double gmst;
 	double S[9] = { 0.0 };
+
+
 	gmst = utc2gmst(tutc, utc_ut1);
 	Rz(gmst, U);
 	S[0 + 1 * 3] = 1.0;
